@@ -1,10 +1,25 @@
 package com.github.appx.utils;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
 
 public class DynamoFactory {
 
@@ -31,4 +46,28 @@ public class DynamoFactory {
     private static AWSCredentialsProvider getAwsCredentials() {
         return new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY));
     }
+    
+    
+    public static void write(final String filePath, final String tableName, final String expression, final Map<String, AttributeValue> attrs) throws JsonIOException, IOException{
+		final QueryRequest request = new QueryRequest(tableName);
+		request.setKeyConditionExpression(expression);
+		request.setExpressionAttributeValues(attrs);
+        request.setConsistentRead(true);
+		final QueryResult result = DYNAMO_INSTANCE.query(request);
+		final List<Map<String, AttributeValue>> results = result.getItems();
+		JsonArray arr = new JsonArray();
+		for (Map<String, AttributeValue> entry : results) {
+			 JsonObject obj = new JsonObject();
+	         for( Entry<String, AttributeValue> e: entry.entrySet()){
+	        	 obj.addProperty(e.getKey(), e.getValue().toString());
+	         }
+	         arr.add(obj);
+	    }
+		JsonObject o = new JsonObject();
+		o.add(tableName, arr);
+		new Gson().toJson(o, new FileWriter(filePath));
+    }
+    
+    
+
 }
