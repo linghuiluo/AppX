@@ -1,14 +1,20 @@
 package com.github.appx.bl.dao.impl;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.github.appx.api.Request;
 import com.github.appx.bl.TagsResponse;
 import com.github.appx.bl.dao.TagsDao;
 import com.github.appx.utils.DynamoFactory;
 import com.github.appx.utils.exceptions.DatasourceException;
+import com.google.gson.JsonIOException;
 
 public class TagsDaoImpl implements TagsDao {
 
@@ -26,7 +32,6 @@ public class TagsDaoImpl implements TagsDao {
                     withPrimaryKey(PRIMARY_KEY, request.getLanguage()).
                     withAttributesToGet(brandKey, TAGS_KEY);
             Item outcome = table.getItem(spec);
-
             String brands = outcome.getJSONPretty(brandKey);
             String tags = outcome.getJSON(TAGS_KEY);
             return new TagsResponse(brands, tags);
@@ -35,4 +40,22 @@ public class TagsDaoImpl implements TagsDao {
         }
     }
 
+	@Override
+	public void save() {
+		Map<String, AttributeValue> attrs = new HashMap<>();
+		AttributeValue a1 = new AttributeValue();
+		a1.setS("java");
+		attrs.put(":l1", a1);
+		try {
+			DynamoFactory.write("tags.json", TABLE_NAME, "#language = :l1", attrs);
+		} catch (JsonIOException e) {
+		    throw new DatasourceException(e.getMessage(), e);
+		} catch (IOException e) {
+			throw new DatasourceException(e.getMessage(), e);
+		}
+		
+	}
+    
+   
+    
 }
