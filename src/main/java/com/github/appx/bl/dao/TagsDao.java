@@ -5,7 +5,7 @@ import com.github.appx.bl.TagsResponse;
 
 public interface TagsDao {
 
-    TagsResponse getTags(Request request);
-    
-    void save();
+	TagsResponse getTags(Request request);
+
+	void save();
 }
