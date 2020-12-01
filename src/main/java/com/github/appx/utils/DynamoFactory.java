@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -53,7 +54,7 @@ public class DynamoFactory {
 		request.setKeyConditionExpression(expression);
 		request.setExpressionAttributeValues(attrs);
         request.setConsistentRead(true);
-		final QueryResult result = DYNAMO_INSTANCE.query(request);
+        final QueryResult result = DYNAMO_INSTANCE.query(request);
 		final List<Map<String, AttributeValue>> results = result.getItems();
 		JsonArray arr = new JsonArray();
 		for (Map<String, AttributeValue> entry : results) {
@@ -65,9 +66,13 @@ public class DynamoFactory {
 	    }
 		JsonObject o = new JsonObject();
 		o.add(tableName, arr);
-		new Gson().toJson(o, new FileWriter(filePath));
+        new Gson().toJson(o, new FileWriter(filePath));
     }
     
     
-
+    public static List<String> selectIDs(QueryResult res, String idAttributeName) {
+    	final List<Map<String, AttributeValue>> items = res.getItems();
+    	final List<String> ids = items.stream().map(attMap-> attMap.get(idAttributeName).getS()).collect(Collectors.toList());
+    	return ids;
+    }
 }

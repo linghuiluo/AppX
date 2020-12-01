@@ -62,7 +62,7 @@ public class TagsServiceImpl implements TagsService {
 
     private void writeToFile(JsonObject brandTags) throws IOException {
     	File temp =File.createTempFile("tags", ".log");
-    	OutputStream out = new FileOutputStream(temp);
+        OutputStream out = new FileOutputStream(temp);
         Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
         writer.write(brandTags.toString());
         writer.close();
