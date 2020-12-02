@@ -34,8 +34,6 @@ public class TagsDaoImpl implements TagsDao {
 			String brands = outcome.getJSONPretty(brandKey);
 			String tags = outcome.getJSON(TAGS_KEY);
 			return new TagsResponse(brands, tags);
-	
-	
 		} catch (Exception e) {
 			throw new DatasourceException("Failed to get TAGS from DB");
 		}
