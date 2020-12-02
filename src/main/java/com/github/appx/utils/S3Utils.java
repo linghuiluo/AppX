@@ -27,8 +27,6 @@ public class S3Utils {
 
 	public static BufferedReader getS3BufferedReader(String keyName) throws IOException {
 		return getS3BufferedReader(S3CONFIG, keyName);
-	
-	
 	}
 	
 
