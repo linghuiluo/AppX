@@ -6,6 +6,6 @@ import com.github.appx.api.Request;
 
 public interface InputService {
 
-	Request getInputParams(Map<String, Object> input);
+    Request getInputParams(Map<String, Object> input);
 
 }

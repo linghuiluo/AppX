@@ -12,11 +12,11 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 @Builder
 public class Result {
 
-	private String tableName;
+    private String tableName;
 
-	private String accountId;
+    private String accountId;
 
-	private Integer maxResults;
+    private Integer maxResults;
 
-	private Map<String, AttributeValue> exclusiveStartKey;
+    private Map<String, AttributeValue> exclusiveStartKey;
 }

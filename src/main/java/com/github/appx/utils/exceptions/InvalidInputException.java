@@ -2,14 +2,14 @@ package com.github.appx.utils.exceptions;
 
 public class InvalidInputException extends RuntimeException {
 
-	private final String message;
+    private final String message;
 
-	public InvalidInputException(String msg, Exception e) {
-		super(msg, e);
-		this.message = msg;
-	}
+    public InvalidInputException(String msg, Exception e) {
+        super(msg, e);
+        this.message = msg;
+    }
 
-	public String getMessage() {
-		return this.message;
-	}
+    public String getMessage() {
+        return this.message;
+    }
 }

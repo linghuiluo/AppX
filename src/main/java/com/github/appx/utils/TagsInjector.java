@@ -10,11 +10,11 @@ import com.google.inject.AbstractModule;
 
 public class TagsInjector extends AbstractModule {
 
-	@Override
-	protected void configure() {
-		bind(InputService.class).to(InputServiceImpl.class);
-		bind(TagsService.class).to(TagsServiceImpl.class);
-		bind(TagsDao.class).to(TagsDaoImpl.class);
-	}
+    @Override
+    protected void configure() {
+        bind(InputService.class).to(InputServiceImpl.class);
+        bind(TagsService.class).to(TagsServiceImpl.class);
+        bind(TagsDao.class).to(TagsDaoImpl.class);
+    }
 
 }

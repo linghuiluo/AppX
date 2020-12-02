@@ -5,6 +5,6 @@ import com.google.gson.JsonObject;
 
 public interface TagsService {
 
-	JsonObject getTags(Request request);
+    JsonObject getTags(Request request);
 
 }
