@@ -41,6 +41,7 @@ public class DynamoFactory {
 	}
 
 	private static AWSCredentialsProvider getAwsCredentials() {
+		
 		return new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY));
 	
 	}
