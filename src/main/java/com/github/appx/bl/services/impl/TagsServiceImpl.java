@@ -66,7 +66,6 @@ public class TagsServiceImpl implements TagsService {
 		OutputStream out = new FileOutputStream(temp);
 		Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
 		writer.write(brandTags.toString());
-		
 		writer.close();
 	}
 
