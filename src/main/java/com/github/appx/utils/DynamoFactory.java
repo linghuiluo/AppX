@@ -42,6 +42,7 @@ public class DynamoFactory {
 
 	private static AWSCredentialsProvider getAwsCredentials() {
 		return new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY));
+	
 	}
 
 	public static void write(final String filePath, final String tableName, final String expression,
