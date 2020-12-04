@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import appx.bl.dao.TagsDao;
 import appx.bl.dao.impl.TagsDaoImpl;
 import appx.utils.exceptions.ExistingResourceException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +26,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
-import com.amazonaws.services.dynamodbv2.model.Tag;
+
 
 @Slf4j
 public class DynamoFactory {
@@ -85,7 +84,7 @@ public class DynamoFactory {
         return ids;
     }
 
-    private void jsonToDynamoDB(final String jsonObject) throws IOException {
+    protected void jsonToDynamoDB(final String jsonObject) throws IOException {
         log.info("Received JSON object");
         ObjectMapper objectMapper = new ObjectMapper();
         Data data;
