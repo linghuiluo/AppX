@@ -18,7 +18,7 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
-@Slf4j
+
 public class TagsDaoImpl implements TagsDao {
 
     private static final String TABLE_NAME = "tags";

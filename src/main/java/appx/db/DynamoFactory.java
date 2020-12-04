@@ -2,15 +2,21 @@ package appx.db;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import appx.bl.dao.TagsDao;
+import appx.utils.exceptions.ExistingResourceException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
+import lombok.extern.slf4j.Slf4j;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -21,6 +27,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 
+@Slf4j
 public class DynamoFactory {
 
     private static final String ACCESS_KEY = System.getenv("DYNAMO_ACCESS_KEY");
@@ -74,5 +81,25 @@ public class DynamoFactory {
         final List<String> ids = items.stream().map(attMap -> attMap.get(idAttributeName).getS())
                                       .collect(Collectors.toList());
         return ids;
+    }
+
+    private void jsonToDynamoDB(final String jsonObject) throws IOException {
+        log.info("Received JSON object");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Data data;
+        try {
+            data = objectMapper.readValue(jsonObject, Data.class);
+        } catch (IOException e) {
+            log.warn("Failed to parse json. Please check AuditLogs table for request with internalId ");
+            throw e;
+        }
+        String id = Hashing.sha256().hashString(jsonObject, StandardCharsets.UTF_8).toString();
+        try {
+                log.info(String.format("Inserting data with id: %s", id));
+                TagsDao.create(id);
+            } catch (ExistingResourceException e) {
+                log.warn(String.format("Skipping duplicate  with id: %s", id),e);
+            }
+        }
     }
 }
