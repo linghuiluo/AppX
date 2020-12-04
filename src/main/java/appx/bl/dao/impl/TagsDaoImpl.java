@@ -7,10 +7,10 @@ import java.util.Map;
 import appx.api.Request;
 import appx.bl.TagsResponse;
 import appx.bl.dao.TagsDao;
+import appx.db.Data;
 import appx.db.DynamoFactory;
 import appx.utils.exceptions.DatasourceException;
 import com.google.gson.JsonIOException;
-import lombok.extern.slf4j.Slf4j;
 
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
@@ -57,5 +57,12 @@ public class TagsDaoImpl implements TagsDao {
         }
 
     }
+
+	@Override
+	public void useData(Data data) {
+		Request re=new Request(Integer.parseInt(data.getId()), "java");
+		TagsResponse res= getTags(re);
+		res.getBrandTags();
+	}
 
 }

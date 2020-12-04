@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import appx.bl.dao.TagsDao;
+import appx.bl.dao.impl.TagsDaoImpl;
 import appx.utils.exceptions.ExistingResourceException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
@@ -26,6 +27,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.amazonaws.services.dynamodbv2.model.Tag;
 
 @Slf4j
 public class DynamoFactory {
@@ -96,10 +98,10 @@ public class DynamoFactory {
         String id = Hashing.sha256().hashString(jsonObject, StandardCharsets.UTF_8).toString();
         try {
                 log.info(String.format("Inserting data with id: %s", id));
-                TagsDao.create(id);
-            } catch (ExistingResourceException e) {
-                log.warn(String.format("Skipping duplicate  with id: %s", id),e);
-            }
+                new TagsDaoImpl().useData(data);
+        } catch (ExistingResourceException e) {
+                log.warn(String.format("Skipping duplicate  with id: %s", id), e);
         }
     }
 }
+
