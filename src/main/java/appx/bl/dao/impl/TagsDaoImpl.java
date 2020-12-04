@@ -10,6 +10,7 @@ import appx.bl.dao.TagsDao;
 import appx.db.DynamoFactory;
 import appx.utils.exceptions.DatasourceException;
 import com.google.gson.JsonIOException;
+import lombok.extern.slf4j.Slf4j;
 
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
@@ -17,6 +18,7 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
+@Slf4j
 public class TagsDaoImpl implements TagsDao {
 
     private static final String TABLE_NAME = "tags";
@@ -36,6 +38,7 @@ public class TagsDaoImpl implements TagsDao {
             String tags = outcome.getJSON(TAGS_KEY);
             return new TagsResponse(brands, tags);
         } catch (Exception e) {
+            log.error("Failed to get TAGS from DB", e);
             throw new DatasourceException("Failed to get TAGS from DB");
         }
     }
